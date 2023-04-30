@@ -1,0 +1,14 @@
+cajaz.cajaz
+china.china
+easia.easia
+india.india
+kosau.kosau
+laca.laca
+mena.mena
+neweuro.neweuro
+oldeuro.oldeuro
+sasia.sasia
+ssa.ssa
+te.te
+usa.usa
+WORLD.(cajaz,china,easia,india,kosau,laca,mena,neweuro,oldeuro,sasia,ssa,te,usa)

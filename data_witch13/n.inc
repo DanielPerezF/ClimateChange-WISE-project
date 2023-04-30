@@ -1,0 +1,13 @@
+cajaz
+china
+easia
+india
+kosau
+laca
+mena
+neweuro
+oldeuro
+sasia
+ssa
+te
+usa
