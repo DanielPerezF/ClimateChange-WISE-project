@@ -7,3 +7,5 @@
 *.log~4
 *.gsp
 *.pyc
+*.RData
+*.Rhistory
