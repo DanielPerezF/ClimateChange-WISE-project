@@ -9,3 +9,4 @@
 *.pyc
 *.RData
 *.Rhistory
+.Rproj.user/shared/notebooks/paths
