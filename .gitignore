@@ -10,3 +10,4 @@
 .Rproj.user
 *.RData
 *.Rhistory
+.Rproj.user/shared/notebooks/paths
