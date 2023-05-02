@@ -7,3 +7,4 @@
 *.log~4
 *.gsp
 *.pyc
+.Rproj.user
