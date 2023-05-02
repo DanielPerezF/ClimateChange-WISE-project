@@ -1,5 +1,5 @@
 rm(list = ls())
-witch_folder = "../" #Where you're RICE/DICE/RICE50x code is located
+witch_folder = "C:/Users/danip/Documents/GitHub/ClimateChange-WISE-project" #Where you're RICE/DICE/RICE50x code is located
 #main directory of your results files
 main_directory <- witch_folder # by default, the witch source folder
 subdir = c("results") #can be multiple directories

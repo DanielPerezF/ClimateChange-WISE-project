@@ -1,0 +1,73 @@
+Running the RICE base model with the flags: --n='witch17' --cooperation=coop --gamma=(...) --nameout=(...) 
+
+```{r}
+library(gdxtools)
+library(tidyverse)
+
+#mygdx <- gdx('results/results_witch17_reg.gdx')
+#emi <- mygdx["E"] |> as_tibble() # see as table
+
+var = 'E'  #'E' for emissions, 'TEMP_REGION' for temp
+
+myfiles = file.path('results',c("results_gamma05.gdx","results_gamma145.gdx"))
+emi = batch_extract(var,files = myfiles)[[1]]
+
+emi <- emi |>
+  mutate(year = as.numeric(t) * 5 + 2010) |> # Transform time period into year
+  mutate(scen = basename(gdx)) |>            # Transform the filename into a scenario name
+  mutate(scen = str_replace(scen, ".gdx", "")) |>
+  mutate(scen = str_replace(scen, "results_", ""))
+emi
+```
+
+# Maps
+
+## Map codes
+
+```{r}
+# import the WITCH model regional definition
+wreg <- read_csv('mapwitch17.csv')
+
+# Country name tools
+library(countrycode)
+
+# transforms ISO codes into country names
+wreg <- wreg |>
+mutate(region = countrycode(ISO, origin = 'iso3c', destination = 'country.name'))
+
+wreg
+```
+
+Merging
+
+```{r}
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+
+world <- ne_countries(scale = "small", returnclass = "sf")
+world <- subset(world,!adm0_a3 %in% c("ATA","FJI"))
+
+# merge the WITCH regional definition with the world map
+world <- merge(world,wreg, by.x = "adm0_a3", by.y = "ISO")
+
+# merge with the emission data.frame
+world0 <- merge(world,emi |> filter(year==2100), by = "n", allow.cartesian=TRUE)
+
+# Use a better projection 'equal projection'
+target_crs <- '+proj=eqearth +wktext'
+world1 <- st_transform(world0, crs = target_crs)
+```
+
+##Map plot
+
+```{r}
+ggplot(data = world1) +
+  geom_sf(aes(fill = value)) +
+  coord_sf(datum = target_crs, expand = FALSE, clip = "off") +
+  scale_fill_distiller(name = "CO2 Emissions\nin 2100", palette ="RdYlGn", direction=-1) +
+  theme_void() + 
+  theme(legend.position = "bottom",
+        strip.text.x = element_text(size = 12, face="bold")) +
+  facet_grid(~scen)
+```
