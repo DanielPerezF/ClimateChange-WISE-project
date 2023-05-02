@@ -8,3 +8,5 @@
 *.gsp
 *.pyc
 .Rproj.user
+*.RData
+*.Rhistory
