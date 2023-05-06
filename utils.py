@@ -34,3 +34,14 @@ def read_scenarios(paths,vars,initial_year=2010,tstep=5):
         df_old = pd.concat([df_old,df_new])
         
     return df_old
+
+def calc_cum_emis(data,final_y=2100):
+    cum_emis = pd.DataFrame()
+
+    for scen in data['scen'].unique():
+        df_scen = data[(data['scen'] == scen) & (data['year'] <= final_y)]
+        cum_emis_scen = df_scen.pivot_table('E','year','region').cumsum().reset_index()
+        cum_emis_scen = pd.melt(cum_emis_scen,id_vars=['year'],value_name='CUMEMI')
+        cum_emis_scen['scen'] = scen
+        cum_emis = pd.concat([cum_emis,cum_emis_scen])
+    return cum_emis
