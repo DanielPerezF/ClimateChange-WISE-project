@@ -1,0 +1,21 @@
+Carbon budget can be found as a flag in "cea-budget" in the core policy. Here we find that cbudget is set to 650, now we have to understand how this constraint is actually used in the code, and how every country is splitting their carbon budget; from that we can understand how to 
+split the carbon budget in each country according to different fairness princple that we want to set as a new flag variable 
+(e.g. fairness: "grandfathering", "percapita consumption", "greenhouse development rights").
+N:B: if we use "cea-budget" we NEED to seet the "coop" option!
+
+Daniel plotted in the R "world plot" the emission for every country changing the "gamma" parameter.
+
+In the gdxcompar (that I cannot run), with daniel PC, emissions cannot be shown!
+
+Now we plot the cea-cbudget for different carbon budget, and we see that with 650 or lower we don't reach the result (unfeasible solution), this is because the model cannot reach a solution with such a low amount of emission total. From this we observe that: the equation in the code that says "total emission for each year and each country 
+
+speaking with te professor he suggested us a starting point: sum(t) E(t,n) < budget_n (budget as a vector, not a scalar). And the budget_n
+is the part that we have to decide how to split within each country (considering that those numbers will change for every fairness principle
+and is up to us to decide their values! An idea could be to decide for each country a percentage and multiply it by the total carbon budget, doing so we are sure that the total sum will be the actual carbon budget for the whole world)
+
+We started to work on Github (just looking at the app and see how to collaborate)
+
+
+Obs: we are now working with witch number of regions
+
+
