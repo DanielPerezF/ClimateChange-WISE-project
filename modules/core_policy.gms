@@ -222,11 +222,30 @@ $elseif.ph %phase%=='eqs'
 
 # ==== CBUDGET =======
 
-$ifthen.pol '%policy%'=='cea-cbudget' 
+$ifthen.pol '%policy%'=='cea-cbudget'
+
+parameter all_shares(ssp,n);
+$call csv2gdx %datapath%pop_shares.csv id=d index=2,3 value=5 useHeader=y output=all_shares.gdx
+$gdxIn all_shares.gdx
+$load all_shares = d
+$gdxIn
+
+parameter pop_shares(n);
+pop_shares(n) =  all_shares('%baseline%',n);
+
+* parameter pop_shares(n) /
+*     r5lam	0.07970095
+*     r5maf	0.267886425
+*     r5oecd	0.130480341
+*     r5ref	0.053360267
+*     r5asia	0.468572017
+
+* /;
+
 * add carbon budget equation
-eq_carbon_budget..   sum((t,n)$(year(t) le 2100), E(t,n) ) * tstep  =L=  %cbudget%;
+eq_carbon_budget(n)..   sum(t$(year(t) le 2100), E(t,n) ) * tstep  =L=  %cbudget%*pop_shares(n);
 
-
+* eq_carbon_budget..   sum((t,n)$(year(t) le 2100), E(t,n) ) * tstep  =L=  %cbudget%;
 # ==== CEA-TATM =======
 
 $elseif.pol '%policy%'=='cea-tatm'
