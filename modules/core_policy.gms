@@ -233,19 +233,10 @@ $gdxIn
 parameter pop_shares(n);
 pop_shares(n) =  all_shares('%baseline%',n);
 
-* parameter pop_shares(n) /
-*     r5lam	0.07970095
-*     r5maf	0.267886425
-*     r5oecd	0.130480341
-*     r5ref	0.053360267
-*     r5asia	0.468572017
-
-* /;
-
 * add carbon budget equation
 eq_carbon_budget(n)..   sum(t$(year(t) le 2100), E(t,n) ) * tstep  =L=  %cbudget%*pop_shares(n);
 
-* eq_carbon_budget..   sum((t,n)$(year(t) le 2100), E(t,n) ) * tstep  =L=  %cbudget%;
+eq_carbon_budget..   sum((t,n)$(year(t) le 2100), E(t,n) ) * tstep  =L=  %cbudget%;
 # ==== CEA-TATM =======
 
 $elseif.pol '%policy%'=='cea-tatm'
@@ -303,6 +294,7 @@ $endif.pol
 #_________________________________________________________________________
 $elseif.ph %phase%=='gdx_items'
 
+pop_shares
 
 # ==== SIMULATION ======
 
