@@ -224,19 +224,37 @@ $elseif.ph %phase%=='eqs'
 
 $ifthen.pol '%policy%'=='cea-cbudget'
 
-parameter all_shares(ssp,n);
-$call csv2gdx %datapath%pop_shares.csv id=d index=2,3 value=5 useHeader=y output=all_shares.gdx
+* If use regionalized budgets or not
+$setglobal sharing "no"
+
+$ifthen.reg_budget %sharing%=="no"
+eq_carbon_budget..   sum((t,n)$(year(t) le 2100), E(t,n) ) * tstep  =L=  %cbudget%;
+
+$else.reg_budget #Use regionalized budgets
+
+$setglobal approach "percapita" #Flag for effort sharing approach
+* Different effort sharing approaches
+set effort_approaches /percapita
+gdp_percapita
+gdp_percapita_inv
+current_emis_percapita
+current_emis_percapita_inv/;
+
+* Read all the possible shares
+parameter all_shares(ssp,effort_approaches,n);
+$call csv2gdx %datapath%effort_shares.csv id=d index=2,3,4 value=5 useHeader=y output=all_shares.gdx
 $gdxIn all_shares.gdx
 $load all_shares = d
 $gdxIn
 
-parameter pop_shares(n);
-pop_shares(n) =  all_shares('%baseline%',n);
+* Use the shares of the given ssp and approach
+parameter budget_shares(n);
+budget_shares(n) =  all_shares('%baseline%','%approach%',n);
 
 * add carbon budget equation
-eq_carbon_budget(n)..   sum(t$(year(t) le 2100), E(t,n) ) * tstep  =L=  %cbudget%*pop_shares(n);
+eq_carbon_budget(n)..   sum(t$(year(t) le 2100), E(t,n) ) * tstep  =L=  %cbudget%*budget_shares(n);
+$endif.reg_budget
 
-eq_carbon_budget..   sum((t,n)$(year(t) le 2100), E(t,n) ) * tstep  =L=  %cbudget%;
 # ==== CEA-TATM =======
 
 $elseif.pol '%policy%'=='cea-tatm'
@@ -294,7 +312,11 @@ $endif.pol
 #_________________________________________________________________________
 $elseif.ph %phase%=='gdx_items'
 
-pop_shares
+$ifthen.effort_report %sharing%=="yes"
+effort_approaches
+budget_shares
+cbudget
+$endif.effort_report
 
 # ==== SIMULATION ======
 
