@@ -230,15 +230,19 @@ $setglobal sharing "no"
 $ifthen.reg_budget %sharing%=="no"
 eq_carbon_budget..   sum((t,n)$(year(t) le 2100), E(t,n) ) * tstep  =L=  %cbudget%;
 
-$else.reg_budget #Use regionalized budgets
+* Use regionalized budgets
+$else.reg_budget
 
 $setglobal approach "percapita" #Flag for effort sharing approach
 * Different effort sharing approaches
-set effort_approaches /percapita
+set effort_approaches /
+percapita
 gdp_percapita
 gdp_percapita_inv
 current_emis_percapita
-current_emis_percapita_inv/;
+current_emis_percapita_inv
+hist_emis
+hist_emis_inv/;
 
 * Read all the possible shares
 parameter all_shares(ssp,effort_approaches,n);
@@ -315,7 +319,6 @@ $elseif.ph %phase%=='gdx_items'
 $ifthen.effort_report %sharing%=="yes"
 effort_approaches
 budget_shares
-cbudget
 $endif.effort_report
 
 # ==== SIMULATION ======
