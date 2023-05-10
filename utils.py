@@ -1,7 +1,7 @@
 from gams.transfer import Container
 import pandas as pd
 
-def read_gdx(path_gdx: str,vars,initial_year=2010,tstep=5):
+def read_gdx(path_gdx: str,vars,initial_year=2015,tstep=5):
     """Read the gdx
     path_gdx: path to file .gdx
     var: str of variable to read
@@ -25,7 +25,7 @@ def read_gdx(path_gdx: str,vars,initial_year=2010,tstep=5):
         df.rename(columns={'n_1':'region'},inplace=True)
     return df
 
-def read_scenarios(paths,vars,initial_year=2010,tstep=5):
+def read_scenarios(paths,vars,initial_year=2015,tstep=5):
     df_old = pd.DataFrame()
 
     for path in paths:
