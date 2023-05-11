@@ -74,8 +74,8 @@ $setglobal cbudget 650
 $setglobal run_mode  'optimization'
 $ifi not %run_mode%=='optimization' $abort 'USER ERROR: [run_mode] must be -optimization- for CBUDGET policy!'
 * No impacts
-*$setglobal impact "off"
-*$ifi not %impact%=="off" $abort 'USER ERROR: [impact] must be -off- for CBUDGET policy!'
+$setglobal impact "off"
+$ifi not %impact%=="off" $abort 'USER ERROR: [impact] must be -off- for CBUDGET policy!'
 * Cooperation mode 
 $ifi not %cooperation%=='coop' $abort 'USER ERROR: [cooperation] must be -coop- for CBUDGET policy!'
 
