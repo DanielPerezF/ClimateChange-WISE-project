@@ -9,14 +9,21 @@ library(tidyverse)
 
 var = 'E'  #'E' for emissions, 'TEMP_REGION' for temp
 
-myfiles = file.path('results',c("results_gamma05.gdx","results_gamma145.gdx"))
+myfiles = file.path('results/Effort sharing scenarios/Budget 1000',c("results_approach_percapita_ssp2_1000.gdx","results_approach_gdp_percapita_inv_ssp2_1000.gdx","results_approach_hist_emis_inv_ssp2_1000.gdx","results_approach_current_emis_percapita_ssp2_1000.gdx"))
+#
 emi = batch_extract(var,files = myfiles)[[1]]
 
 emi <- emi |>
   mutate(year = as.numeric(t) * 5 + 2010) |> # Transform time period into year
+  #mutate(value = value*5) |>
   mutate(scen = basename(gdx)) |>            # Transform the filename into a scenario name
-  mutate(scen = str_replace(scen, ".gdx", "")) |>
-  mutate(scen = str_replace(scen, "results_", ""))
+  mutate(scen = str_replace(scen, "_ssp2_1000.gdx", "")) |>
+  mutate(scen = str_replace(scen, "results_", "")) |>
+  mutate(scen = str_replace(scen, "approach_", "")) |>
+  mutate(scen = str_replace(scen, "gdp_percapita_inv", "Ability to pay")) |>
+  mutate(scen = str_replace(scen, "hist_emis_inv", "Equal cumulative emissions")) |>
+  mutate(scen = str_replace(scen, "current_emis_percapita", "Grandfathering")) |>
+  mutate(scen = str_replace(scen, "percapita", "Per capita"))
 emi
 ```
 
@@ -26,7 +33,7 @@ emi
 
 ```{r}
 # import the WITCH model regional definition
-wreg <- read_csv('mapwitch17.csv')
+wreg <- read_csv('maped57.csv')
 
 # Country name tools
 library(countrycode)
@@ -62,12 +69,13 @@ world1 <- st_transform(world0, crs = target_crs)
 ##Map plot
 
 ```{r}
+x11()
 ggplot(data = world1) +
   geom_sf(aes(fill = value)) +
   coord_sf(datum = target_crs, expand = FALSE, clip = "off") +
-  scale_fill_distiller(name = "CO2 Emissions\nin 2100", palette ="RdYlGn", direction=-1) +
+  scale_fill_distiller(name = "Emissions in 2100\n(GtonCO2)", palette ="RdYlGn", direction=-1) +
   theme_void() + 
   theme(legend.position = "bottom",
         strip.text.x = element_text(size = 12, face="bold")) +
-  facet_grid(~scen)
+  facet_wrap(~scen, nrow=2)
 ```
