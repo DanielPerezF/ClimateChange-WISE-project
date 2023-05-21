@@ -23,7 +23,7 @@ def read_gdx(path_gdx: str,vars,initial_year=2015,tstep=5):
     df['t'] = df['t'].astype('int')
     df['year'] = initial_year + tstep*(df['t']-1)
     if 'n_1' in df.columns:
-        df = df.rename(colummns={'n_1':'region'})
+        df = df.rename(columns={'n_1':'region'})
         df['region'] = df['region'].astype(str)
     return df
 
